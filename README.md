@@ -6,10 +6,10 @@ This project presents an innovative system for optimizing data routing in comput
 
 - Utilizes a stack to trace the routing path of data packets across the network, allowing for efficient route tracking and robust error handling. As data packets travel from one node to another, each node they pass through can be pushed onto the stack. This allows for easy tracking of the route taken by each packet and facilitates efficient error handling or rerouting if needed. 
 
-- Employs a binary search tree to manage network nodes and their connections, enabling rapid lookup and selection of optimal paths for data routing. Each node in the tree represents a network device (such as routers, switches, or servers), with the left child representing nodes that are closer in terms of network latency or cost, and the right child representing nodes that are farther away. This structure enables quick lookup and selection of optimal paths for data routing. (This sound like weighted graph and Dijkstra's algorithm) 
-Suggested change: "Rephrased point 2: Implement a simple load balancing algorithm that distributes data packets evenly across network nodes, ensuring efficient use of network resources. This can be achieved with heap data structure."
+- When an end device sends a data packet to another device, the sysadmin need to keep track of the starting and ending point of the packet. This can be done using hash table, which can store the starting and ending point of the packet. This allows the sysadmin to quickly identify the source and destination of each packet, facilitating efficient error handling and route optimization.
 
-- Applies Dijkstra's algorithm to identify the shortest path between network nodes, ensuring efficient data packet travel from source to destination. By treating the network as a graph, with nodes representing network devices and edges representing connections between them, you can use Dijkstra's algorithm to calculate the shortest path for data packets to travel from a source node to a destination node.
+- Each connection might have network latency, which we can turn into graph's weight. The weight can be used to calculate the shortest path between network nodes, ensuring efficient data packet travel from source to destination. By treating the network as a graph, with nodes representing network devices and edges representing connections between them, you can use Dijkstra's algorithm to calculate the shortest path for data packets to travel from a source node to a destination node.
+
 
 ## Installation
 
@@ -25,6 +25,19 @@ make
 ```bash
 ./main
 ```
+
+## Usage
+1. User input their network configuration (number of devices, connections, etc.)
+2. The system will auto generate network latency for each connection
+3. User can access the command interface to interact with the system, including ('send', 'show', 'trace', 'exit')
+
+| Command | Arguments | Description |
+| --- | --- | --- |
+| send | source_id, destination_id | Send a data packet from the source device to the destination device |
+| show | | Display the network configuration, including devices, connections, and network latency |
+| trace | packet_id | Trace the route taken by a data packet with the specified ID |
+| exit | | Exit the program |
+
 
 ## Planning
 - For user interface, we will use a simple command-line interface (CLI) that allows users to interact with the system by entering commands and viewing output.
