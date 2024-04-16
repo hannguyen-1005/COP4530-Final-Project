@@ -39,8 +39,3 @@ make
 | exit | | Exit the program |
 
 
-## Planning
-- For user interface, we will use a simple command-line interface (CLI) that allows users to interact with the system by entering commands and viewing output.
-
-- The displayed network would have about 3-4 layers, with 1st layer is end-device, 2-3 layers are network devices (routers, switches), and the last layer is the server. Technically, end-vice & server are the same, but we can separate them for better visualization.
-
