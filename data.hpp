@@ -14,6 +14,8 @@ public:
 
 private:
     int id;
+    // std::stack<int> routing_path;
+    //create mock data in stack
     std::stack<int> routing_path;
 };
 

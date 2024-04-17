@@ -164,22 +164,77 @@ int main()
         if (user_input == "show")
         {
             // Show the network topology
+            std::cout << network.showNetwork() << std::endl;
             continue;
         }
 
         if (user_input == "send")
         {
             // Send a data packet
+            int source_id = -1, destination_id = -1;
+            while (true)
+            {
+                std::cout << "Enter the source and destination device ids to send a packet, or double -1 to go back: ";
+                std::cin >> source_id >> destination_id;
+
+                if (source_id == -1 && destination_id == -1)
+                    break;
+
+                if (!network.deviceExists(source_id) || !network.deviceExists(destination_id))
+                {
+                    std::cout << "Device id does not exist, try again." << std::endl;
+                    continue;
+                }
+
+                if (!network.connectionExists(source_id, destination_id))
+                {
+                    std::cout << "No connection between source and destination, try again." << std::endl;
+                    continue;
+                }
+
+                if (source_id == destination_id)
+                {
+                    std::cout << "Source and destination are the same, try again." << std::endl;
+                    continue;
+                }
+
+                network.sendPacket(source_id, destination_id);
+                std::cout << "Sent a packet from source to destination." << std::endl;
+                break;
+            }
             continue;
         }
 
         if (user_input == "trace")
         {
             // Trace 1 or all packets
+            int trace_id = -2;
+            while (true)
+            {
+                std::cout << "Enter the packet id to trace, or -1 to go back, or -2 to trace all packets: ";
+                std::cin >> trace_id;
+
+                if (trace_id == -1)
+                    break;
+
+                if (trace_id == -2)
+                {
+                    std::cout << network.traceAllPackets() << std::endl;
+                    break;
+                }
+
+                if (!network.packetExists(trace_id))
+                {
+                    std::cout << "Packet id does not exist, try again." << std::endl;
+                    continue;
+                }
+
+                std::cout << network.tracePacket(trace_id) << std::endl;
+                break;
+            }
             continue;
         }
     }
-
     std::cout << "Exiting the program..." << std::endl;
     return 0;
 }

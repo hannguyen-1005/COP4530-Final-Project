@@ -50,6 +50,8 @@ make
 | trace | packet_id | Trace the route taken by a data packet with the specified ID, leave blank to trace all packets |
 | exit | | Exit the program |
 
+Check for example usage in the `test.txt` file. Enter each line in the file as a command in the command interface.
+
 ## Planning
 - Feature 1: Create stacks built into each data packet to trace its route
 - Feature 2: Implement 2 hash tables, 1st map packet_id to source_id, 2nd map packet_id to destination_id

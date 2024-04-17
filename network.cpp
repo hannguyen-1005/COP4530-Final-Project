@@ -135,14 +135,73 @@ std::string Network::showNetwork() const
         // check if the device has no connections
         if (it->second.empty())
         {
-            network_str += " -> No connections;\n\n";
+            network_str += "  -> No connections;\n\n";
             continue;
         }
 
         for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2)
-            network_str += " -> Device " + std::to_string(*it2) + ";\n\n";
+            network_str += "  -> Device " + std::to_string(*it2) + ";\n\n";
     }
-    // TODO: Add packet information tables here
 
-    return network_str;
+    // Display packets information
+    std::string packets_str = "\nPackets Information:\n";
+    for (auto it = packets.begin(); it != packets.end(); ++it)
+    {
+        // Check if the packet exists in the network
+        if (packet_sources.find(it->first) == packet_sources.end() || packet_destinations.find(it->first) == packet_destinations.end())
+            continue;
+
+        packets_str += "| Packet " + std::to_string(it->first) + " | Source: " + std::to_string(packet_sources.at(it->first)) + " | Destination: " + std::to_string(packet_destinations.at(it->first)) + " |\n";
+    }
+    return network_str + packets_str;
+}
+
+//
+// Process packets
+//
+
+void Network::sendPacket(int source_id, int destination_id)
+{
+    // Create a new packet
+    DataPacket *packet = new DataPacket(packet_id_counter++);
+
+    // TODO: Uncomment this part after implementing the getShortestPath function
+    // Send the packet through the optimal path
+    // std::vector<int> optimal_path = {source_id, destination_id};
+    // for (int i = 0; i < optimal_path.size(); i++)
+    //     packet->addNodeToPath(optimal_path[i]);
+
+    // Save the source and destination devices for the packet
+    packets[packet->getId()] = packet;
+    packet_sources[packet->getId()] = source_id;
+    packet_destinations[packet->getId()] = destination_id;
+}
+
+std::vector<int> Network::getShortestPath(int source_id, int destination_id)
+{
+    // TODO: Implement Dijkstra's algorithm to find the shortest path between the source and destination devices
+    // Given source_id is start node, destination_id is end node
+    // devices is a vector of all nodes in the network
+    // connections is a vector of all edges in the network
+    // routing_table is an adjacency matrix with latencies between nodes, each latency is the edge's weight
+    // Return a vector of integers representing the shortest path from source to destination
+    return std::vector<int>();
+}
+
+std::string Network::tracePacket(int packet_id)
+{
+    // Check if the packet exists in the network
+    if (!packetExists(packet_id))
+        return "Error: Packet does not exist.";
+
+    // Get the packet's routing path
+    return packets[packet_id]->getRoutingPath();
+}
+
+std::string Network::traceAllPackets()
+{
+    // TODO: Implement a function to show all packets already sent and their paths
+    // Return a string with the information of all packets
+    // Use the tracePacket function to get the path of each packet
+    return "";
 }
