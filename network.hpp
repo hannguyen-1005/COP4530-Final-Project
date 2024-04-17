@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 #include "data.hpp"
 
 // TODO (optional) In a Network there is a function to randomly generate a network given a number of nodes.
@@ -20,10 +21,10 @@ public:
     bool packetExists(int packet_id) const;                         // check if a packet exists in the network
 
     void addDevice();
-    void removeDevice(int device_id); // remove all connections to this device and the device itself
+    void removeDevice(int device_id);                               // remove all connections to this device and the device itself
     void addConnection(int device_id1, int device_id2);
     void removeConnection(int device_id1, int device_id2);
-    void create();                                     // create routing table when user finalize input devices & connections, then init random latency
+    void create();                                                  // create routing table when user finalize input devices & connections, then init random latency
 
 
     void sendPacket(int source_id, int destination_id);             // send a packet from source to destination using optimal path

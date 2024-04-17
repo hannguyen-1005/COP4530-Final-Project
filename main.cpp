@@ -6,11 +6,21 @@
 
 int main()
 {
+    std::cout << "*** Network Simulator ***" << std::endl;
+    std::cout << "Welcome to the network simulator!" << std::endl;
+    std::cout << "You will go through 2 steps to create and interact with a network." << std::endl;
+    std::cout << "Step 1: Create a network" << std::endl;
+    std::cout << "Step 2: Interact with the network" << std::endl;
+    std::cout << "Type 'exit' to exit the program." << std::endl;
+    std::cout << "Read the instructions carefully and follow the commands." << std::endl;
+    std::cout << "Good luck!" << std::endl << std::endl << std::endl;
+
     // The user first creates a network with 5 options
     Network network;
     std::string user_input = "";
     while (user_input != "exit" || user_input != "create")
     {
+        std::cout << "Step 1: Create a network" << std::endl;
         std::cout << "Enter a command: ";
         std::cin >> user_input;
 
@@ -40,23 +50,32 @@ int main()
         {
             // Add a node to the network
             network.addDevice();
+            std::cout << "Added a device to the network." << std::endl;
             continue;
         }
 
         if (user_input == "remove_device")
         {
             int device_id = -1;
-            while (!network.deviceExists(device_id))
+            while (true)
             {
-                std::cout << "Enter the device id to remove: ";
-                std::cin >> user_input;
+                std::cout << "Enter the device id to remove, or -1 to go back: ";
+                std::cin >> device_id;
 
-                if (!network.deviceExists(device_id))
+                if (device_id == -1)
+                    break;
+
+                if (!network.deviceExists(device_id)) {
                     std::cout << "Device id does not exist, try again." << std::endl;
+                    continue;
+                }
+
+                // Remove a node from the network
+                network.removeDevice(device_id);
+                std::cout << "Removed a device from the network." << std::endl;
+                break;
             }
 
-            // Remove a node from the network
-            network.removeDevice(device_id);
             continue;
         }
 
@@ -64,19 +83,35 @@ int main()
         {
             // Add a connection between two nodes
             int device_id1 = -1, device_id2 = -1;
-            while (!network.deviceExists(device_id1) || !network.deviceExists(device_id2) || network.connectionExists(device_id1, device_id2))
+            while (true)
             {
-                std::cout << "Enter the device ids to connect: ";
+                std::cout << "Enter the device ids to connect, or double -1 to go back: ";
                 std::cin >> device_id1 >> device_id2;
 
-                if (!network.deviceExists(device_id1) || !network.deviceExists(device_id2))
-                    std::cout << "Device id does not exist, try again." << std::endl;
+                if (device_id1 == -1 && device_id2 == -1)
+                    break;
 
-                if (network.connectionExists(device_id1, device_id2))
+                if (device_id1 == device_id2)
+                {
+                    std::cout << "Cannot connect a device to itself, try again." << std::endl;
+                    continue;
+                }
+
+                if (!network.deviceExists(device_id1) || !network.deviceExists(device_id2)) {
+                    std::cout << "Device id does not exist, try again." << std::endl;
+                    continue;
+                }
+
+                if (network.connectionExists(device_id1, device_id2)) {
                     std::cout << "Connection already exists, try again." << std::endl;
+                    continue;
+                }
+
+                network.addConnection(device_id1, device_id2);
+                std::cout << "Added a connection between two devices." << std::endl;
+                break;
             }
 
-            network.addConnection(device_id1, device_id2);
             continue;
         }
 
@@ -84,28 +119,45 @@ int main()
         {
             // Remove a connection between two nodes
             int device_id1 = -1, device_id2 = -1;
-            while (!network.deviceExists(device_id1) || !network.deviceExists(device_id2) || !network.connectionExists(device_id1, device_id2))
+            while (true)
             {
-                std::cout << "Enter the device ids to disconnect: ";
+                std::cout << "Enter the device ids to disconnect, or double -1 to go back: ";
                 std::cin >> device_id1 >> device_id2;
 
-                if (!network.deviceExists(device_id1) || !network.deviceExists(device_id2))
-                    std::cout << "Device id does not exist, try again." << std::endl;
+                if (device_id1 == -1 && device_id2 == -1)
+                    break;
 
+                if (!network.deviceExists(device_id1) || !network.deviceExists(device_id2))
+                    {
+                    std::cout << "Device id does not exist, try again." << std::endl;
+                    continue;
+                    }
                 if (!network.connectionExists(device_id1, device_id2))
-                    std::cout << "Connection does not exist, try again." << std::endl;
+                    {
+                        std::cout << "Connection does not exist, try again." << std::endl;
+                        continue;
+                    }
+
+                network.removeConnection(device_id1, device_id2);
+                std::cout << "Removed a connection between two devices." << std::endl;
+                break;
             }
             continue;
         }
 
-        if (user_input == "show")
+        if (user_input == "show") {
             // Show the network topology
             std::cout << network.showNetwork() << std::endl;
+            continue;
+        }
+
+        std::cout << "Invalid command, try again." << std::endl;
     }
 
     // Then user can interact with the network
     while (user_input != "exit")
     {
+        std::cout << "Step 2: Interact with the network" << std::endl;
         std::cout << "Enter a command: ";
         std::cin >> user_input;
 

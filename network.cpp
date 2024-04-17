@@ -52,8 +52,10 @@ void Network::removeDevice(int device_id)
     for (auto it = connections.begin(); it != connections.end();)
     {
         if (it->first == device_id || it->second == device_id)
+        {
             it = connections.erase(it);
-        continue;
+            continue;
+        }
         ++it;
     }
 
@@ -108,22 +110,39 @@ void Network::create()
     }
 }
 
-
 // Display network
 std::string Network::showNetwork() const
 {
-    std::string network_str = "Network:\n";
+    std::string network_str = "Network Topology:\n";
+    // create a hashmap to map each device to its connections
+    std::unordered_map<int, std::unordered_set<int>> device_connections;
 
+    // Loop through the devices vector to get all vertices
     for (int i = 0; i < devices.size(); i++)
-    {
-        network_str += "Device " + std::to_string(devices[i]) + ":\n";
+        device_connections[devices[i]] = std::unordered_set<int>();
 
-        for (int j = 0; j < devices.size(); j++)
-        {
-            if (routing_table.at(devices[i]).at(devices[j]) != -1)
-                network_str += "-> Device " + std::to_string(devices[j]) + " with latency " + std::to_string(routing_table.at(devices[i]).at(devices[j])) + ";\n";
-        }
+    // Loop through the connections vector to get all edges
+    for (int i = 0; i < connections.size(); i++)
+    {
+        device_connections[connections[i].first].insert(connections[i].second);
+        device_connections[connections[i].second].insert(connections[i].first);
     }
+
+    // Finally build the network output string
+    for (auto it = device_connections.begin(); it != device_connections.end(); ++it)
+    {
+        network_str += "* Device " + std::to_string(it->first) + ":\n";
+        // check if the device has no connections
+        if (it->second.empty())
+        {
+            network_str += " -> No connections;\n\n";
+            continue;
+        }
+
+        for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2)
+            network_str += " -> Device " + std::to_string(*it2) + ";\n\n";
+    }
+    // TODO: Add packet information tables here
 
     return network_str;
 }
