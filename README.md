@@ -40,7 +40,8 @@ make
 | exit | | Exit the program |
 
 2. The system will auto generate network latency for each connection
-3. User can access the command interface to interact with the system, including ('send', 'show', 'trace', 'exit')
+
+3. User can access the command interface to interact with the system
 
 | Command | Arguments | Description |
 | --- | --- | --- |
@@ -54,20 +55,23 @@ make
 - Feature 2: Implement 2 hash tables, 1st map packet_id to source_id, 2nd map packet_id to destination_id
 - Feature 3: First treat the network as a graph, with each devices is a vertex and each connection is an edge. Randomly assign weight (latency) to each edge. Then use Dijkstra algorithm to find the shortest path between source and destination.
 
-- Object Design (UML):
-    - Network: Represent the network
-      // Graph properties
-      - devices: vector<int> (device id)
-      - connections: vector<pair<int, int>> (adjacency list, link 2 devices ids)
-      - routing_table: vector<vector<int>> (adjacency matrix, represented weight (latency) of each connection)
-      
-      // Hash table to store packet_id and source_id, destination_id
-      - packet_sources: unordered_map<int, int> (packet_id, source_id)
-      - packet_destinations: unordered_map<int, int> (packet_id, destination_id)
-      - packets: unordered_map<int, DataPacket> (packet_id, DataPacket)
+**Object Design (UML)**
+- Network: Represent the network
 
-    ----------------------------
-    // Methods
+  - Properties
+
+    // Graph properties
+    - devices: vector<int> (device id)
+    - connections: vector<pair<int, int>> (adjacency list, link 2 devices ids)
+    - routing_table: vector<vector<int>> (adjacency matrix, represented weight (latency) of each connection)
+    
+    // Hash table to store packet_id, source_id, destination_id
+    - packet_sources: unordered_map<int, int> (packet_id, source_id)
+    - packet_destinations: unordered_map<int, int> (packet_id, destination_id)
+    - packets: unordered_map<int, DataPacket> (packet_id, DataPacket)
+
+  - Methods
+
     - constructor(): Initialize the network and generate random latency for each connection
     - addDevice(int id): Add a node to the network
     - removeDevice(int id): Remove a node and its connections from the network
@@ -79,12 +83,16 @@ make
     - tracePacket(int packet_id): Trace the route taken by a data packet with the specified ID
     - traceAllPackets(): Trace the route taken by all data packets
     - getShortestPath(int source_id, int destination_id): Calculate the optimal latency path between source and destination
+    - and more... (TBD)
 
-    - DataPacket: Represent the data packet
-      - id: int
-      - route: stack<int> (trace the route taken by the packet)
-    ----------------------------
-    // Methods
+
+
+- DataPacket: Represent data packet within the network
+  - Properties
+    - id: int
+    - routing_path: stack<int> (trace the route taken by the packet)
+
+  - Methods
     - constructor(int id): Initialize the data packet with the specified ID
     - addNodeToPath(int id): Add a node to the route
     - removeNodefromPath(): Remove a node from the route
