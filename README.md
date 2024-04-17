@@ -4,7 +4,7 @@ This project presents an innovative system for optimizing data routing in comput
 
 ## Features
 
-- Utilizes a stack to trace the routing path of data packets across the network, allowing for efficient route tracking and robust error handling. As data packets travel from one node to another, each node they pass through can be pushed onto the stack. This allows for easy tracking of the route taken by each packet and facilitates efficient error handling or rerouting if needed. 
+- As data packets travel from one node to another, each node they pass through can be pushed onto the stack. This allows for easy tracking of the route taken by each packet and facilitates efficient error handling or rerouting if needed.
 
 - When an end device sends a data packet to another device, the sysadmin need to keep track of the starting and ending point of the packet. This can be done using hash table, which can store the starting and ending point of the packet. This allows the sysadmin to quickly identify the source and destination of each packet, facilitating efficient error handling and route optimization.
 
@@ -53,7 +53,7 @@ make
 - Feature 2: Implement 2 hash tables, 1st map packet_id to source_id, 2nd map packet_id to destination_id
 - Feature 3: First treat the network as a graph, with each devices is a vertex and each connection is an edge. Randomly assign weight (latency) to each edge. Then use Dijkstra algorithm to find the shortest path between source and destination.
 
-- Class Design (UML):
+- Object Design (UML):
     - Network: Represent the network
       // Graph properties
       - devices: vector<int> (device id)
@@ -67,6 +67,7 @@ make
 
     ----------------------------
     // Methods
+    - constructor(): Initialize the network and generate random latency for each connection
     - addDevice(int id): Add a node to the network
     - removeDevice(int id): Remove a node and its connections from the network
     - addConnection(int source_id, int destination_id): Add a connection between two nodes
@@ -83,6 +84,7 @@ make
       - route: stack<int> (trace the route taken by the packet)
     ----------------------------
     // Methods
+    - constructor(int id): Initialize the data packet with the specified ID
     - addNodeToPath(int id): Add a node to the route
     - removeNodefromPath(): Remove a node from the route
     - showRoute(): Display the route taken by the packet
