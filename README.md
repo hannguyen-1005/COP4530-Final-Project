@@ -28,6 +28,7 @@ make
 
 ## Usage
 1. User creates a network based on their configuration (number of devices, connections, etc.)
+
 | Command | Arguments | Description |
 | --- | --- | --- |
 | add_device | device_id | Add a device to the network |
