@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include <data.hpp>
+#include "data.hpp"
 
 // TODO (optional) In a Network there is a function to randomly generate a network given a number of nodes.
 
@@ -12,6 +12,7 @@ class Network
 {
 public:
     Network(std::vector<int> devices, std::vector<std::vector<int>> connections, std::vector<std::vector<int>> routing_table);
+    Network(); // default constructor
 
     void addDevice(int device_id);
     void removeDevice(int device_id); // remove all connections to this device and the device itself

@@ -27,7 +27,17 @@ make
 ```
 
 ## Usage
-1. User input their network configuration (number of devices, connections, etc.)
+1. User creates a network based on their configuration (number of devices, connections, etc.)
+| Command | Arguments | Description |
+| --- | --- | --- |
+| add_device | device_id | Add a device to the network |
+| remove_device | device_id | Remove a device from the network |
+| add_connection | source_id, destination_id | Add a connection between two devices |
+| remove_connection | source_id, destination_id | Remove a connection between two devices |
+| show | | Display the current network configuration |
+| create | | Create the network based on the current configuration |
+| exit | | Exit the program |
+
 2. The system will auto generate network latency for each connection
 3. User can access the command interface to interact with the system, including ('send', 'show', 'trace', 'exit')
 
@@ -35,7 +45,7 @@ make
 | --- | --- | --- |
 | send | source_id, destination_id | Send a data packet from the source device to the destination device |
 | show | | Display the network configuration, including devices, connections, and network latency |
-| trace | packet_id | Trace the route taken by a data packet with the specified ID |
+| trace | packet_id | Trace the route taken by a data packet with the specified ID, leave blank to trace all packets |
 | exit | | Exit the program |
 
 ## Planning
