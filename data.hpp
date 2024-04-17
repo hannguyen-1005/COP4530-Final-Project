@@ -1,22 +1,20 @@
-#ifndef ROUTING_HPP
-#define ROUTING_HPP
+#ifndef DATA_HPP
+#define DATA_HPP
 
 #include <stack>
 #include <string>
 
 class DataPacket {
 public:
-    DataPacket(std::string id);
-
-    void addNodeToPath(std::string node_id);
-
-    std::string getId() const;
-
+    DataPacket(int id);
+    void addNodeToPath(int node_id);
+    void removeNodeFromPath();
+    int getId() const;
     std::string getRoutingPath() const;
 
 private:
-    std::string id;
-    std::stack<std::string> routingPath;
+    int id;
+    std::stack<int> routing_path;
 };
 
-#endif // ROUTING_HPP
+#endif // DATA_HPP

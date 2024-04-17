@@ -1,26 +1,28 @@
 #include "data.hpp"
 
-DataPacket::DataPacket(std::string id) : id(id) {}
-
-void DataPacket::addNodeToPath(std::string node_id)
+void DataPacket::addNodeToPath(int node_id)
 {
-    routingPath.push(node_id);
+    routing_path.push(node_id);
 }
 
-std::string DataPacket::getId() const
+void DataPacket::removeNodeFromPath() {
+    routing_path.pop();
+}
+
+int DataPacket::getId() const
 {
     return id;
 }
 
 std::string DataPacket::getRoutingPath() const
 {
-    std::stack<std::string> copy_path = routingPath;
+    std::stack<int> routing_path_copy = routing_path;
     std::string out_path;
-    while (!copy_path.empty())
+    while (!routing_path_copy.empty())
     {
-        out_path += copy_path.top();
-        copy_path.pop();
-        if (!copy_path.empty())
+        out_path += std::to_string(routing_path_copy.top());
+        routing_path_copy.pop();
+        if (!routing_path_copy.empty())
             out_path += " -> ";
     }
     return out_path;

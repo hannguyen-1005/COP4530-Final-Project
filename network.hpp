@@ -3,42 +3,39 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
+#include <data.hpp>
 
-// This file define some classes that are used in the routing system.
-// This include the NetworkNode class that represents a node in the network.
-// And Network class that represents the network itself.
 // TODO (optional) In a Network there is a function to randomly generate a network given a number of nodes.
 
-class NetworkNode {
+class Network
+{
 public:
-    NetworkNode(std::string id) : id(id) {}
+    Network(std::vector<int> devices, std::vector<std::vector<int>> connections, std::vector<std::vector<int>> routing_table);
 
-    std::string getId() const {
-        return id;
-    }
+    void addDevice(int device_id);
+    void removeDevice(int device_id); // remove all connections to this device and the device itself
+    void addConnection(int device_id1, int device_id2, int latency);
+    void removeConnection(int device_id1, int device_id2);
+
+    void sendPacket(int source_id, int destination_id);             // send a packet from source to destination using optimal path
+    void tracePacket(int packet_id);                                // show the path of the packet after it was sent
+    void traceAllPackets();                                         // show all packets already sent and their paths
+    std::string showNetwork() const;                                      // return a string with the network topology
+    std::string getShortestPath(int source_id, int destination_id) const; // return the shortest path between source and destination with Dijkstra's algorithm
 
 private:
-    std::string id;
-    std::vector<NetworkNode*> parentNodes; // The devices that this device is connected to
-    std::vector<NetworkNode*> childNodes; // The devices that are connected to this device
-};
+    // The network is bidirectional weighted graph (different latencies between 2 directions are possible)
+    // graph properties
+    std::vector<int> devices;                                            // or nodes
+    std::vector<std::pair<int, int>> connections;                        // or edges, each pair is a connection between two nodes
+    std::unordered_map<int, std::unordered_map<int, int>> routing_table; // or adjacency matrix, each pair is a connection between two nodes, and the value is the latency
 
-class Network {
-    public:
-        Network() {}
-
-        void addNode(NetworkNode* node);
-
-        void generateRandomNetwork(int numNodes); // Generate a random network with numNodes nodes, only works if the network is empty
-    
-        std::vector<std::string> printNetwork(); 
-        // Output the whole network in 2d format, each connect to other with triple star 
-        // horizontally and vertically, not diagonally
-        
-        std::string shortestPath(std::string start, std::string end); // Return the shortest path between two nodes
-    
-    private:
-        std::vector<NetworkNode*> nodes;
+    // data packets properties
+    int packet_id_counter = 0;
+    std::unordered_map<int, DataPacket> packets;       // packet_id, DataPacket
+    std::unordered_map<int, int> packet_sources;      // packet_id, source_id
+    std::unordered_map<int, int> packet_destinations; // packet_id, destination_id
 };
 
 #endif // NETWORK_HPP

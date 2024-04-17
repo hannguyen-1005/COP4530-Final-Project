@@ -38,4 +38,55 @@ make
 | trace | packet_id | Trace the route taken by a data packet with the specified ID |
 | exit | | Exit the program |
 
+## Planning
+- Feature 1: Create stacks built into each data packet to trace its route
+- Feature 2: Implement 2 hash tables, 1st map packet_id to source_id, 2nd map packet_id to destination_id
+- Feature 3: First treat the network as a graph, with each devices is a vertex and each connection is an edge. Randomly assign weight (latency) to each edge. Then use Dijkstra algorithm to find the shortest path between source and destination.
 
+- Class Design (UML):
+    - Network: Represent the network
+      // Graph properties
+      - devices: vector<int> (device id)
+      - connections: vector<pair<int, int>> (adjacency list, link 2 devices ids)
+      - routing_table: vector<vector<int>> (adjacency matrix, represented weight (latency) of each connection)
+      
+      // Hash table to store packet_id and source_id, destination_id
+      - packet_sources: unordered_map<int, int> (packet_id, source_id)
+      - packet_destinations: unordered_map<int, int> (packet_id, destination_id)
+      - packets: unordered_map<int, DataPacket> (packet_id, DataPacket)
+
+    ----------------------------
+    // Methods
+    - addDevice(int id): Add a node to the network
+    - removeDevice(int id): Remove a node and its connections from the network
+    - addConnection(int source_id, int destination_id): Add a connection between two nodes
+    - removeConnection(int source_id, int destination_id): Remove a connection between two nodes
+
+    - sendPacket(int source_id, int destination_id): Send a data packet from source to destination
+    - showNetwork(): Display the network configuration, including devices, connections, and network latency
+    - tracePacket(int packet_id): Trace the route taken by a data packet with the specified ID
+    - traceAllPackets(): Trace the route taken by all data packets
+    - getShortestPath(int source_id, int destination_id): Calculate the optimal latency path between source and destination
+
+    - DataPacket: Represent the data packet
+      - id: int
+      - route: stack<int> (trace the route taken by the packet)
+    ----------------------------
+    // Methods
+    - addNodeToPath(int id): Add a node to the route
+    - removeNodefromPath(): Remove a node from the route
+    - showRoute(): Display the route taken by the packet
+
+
+    mock code to print the network as a graph visualization:
+    ```
+    for (int i = 0; i < nodes.size(); i++) {
+        cout << nodes[i].id << " -> ";
+        for (int j = 0; j < nodes.size(); j++) {
+            if (latency[i][j] != 0) {
+                cout << nodes[j].id << " (" << latency[i][j] << ") ";
+            }
+        }
+        cout << endl;
+    }
+    ```
