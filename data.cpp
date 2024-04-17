@@ -1,5 +1,7 @@
 #include "data.hpp"
 
+// This file is the implementation of the DataPacket class,
+// defining properties and methods of a data packet sending in a network
 void DataPacket::addNodeToPath(int node_id)
 {
     routing_path.push(node_id);

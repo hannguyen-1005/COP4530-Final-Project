@@ -1,6 +1,7 @@
 #ifndef NETWORK_HPP
 #define NETWORK_HPP
 
+#include <random>
 #include <string>
 #include <vector>
 #include <unordered_map>
@@ -11,13 +12,19 @@
 class Network
 {
 public:
-    Network(std::vector<int> devices, std::vector<std::vector<int>> connections, std::vector<std::vector<int>> routing_table);
-    Network(); // default constructor
+    Network();
+    bool enoughDevices() const;                                     // check if there are at least 2 devices in the network 
+    bool enoughConnections() const;                                 // check if there are at least 1 connection in the network
+    bool deviceExists(int device_id) const;                         // check if a device exists in the network
+    bool connectionExists(int device_id1, int device_id2) const;    // check if a connection exists in the network
+    bool packetExists(int packet_id) const;                         // check if a packet exists in the network
 
-    void addDevice(int device_id);
+    void addDevice();
     void removeDevice(int device_id); // remove all connections to this device and the device itself
-    void addConnection(int device_id1, int device_id2, int latency);
+    void addConnection(int device_id1, int device_id2);
     void removeConnection(int device_id1, int device_id2);
+    void create();                                     // create routing table when user finalize input devices & connections, then init random latency
+
 
     void sendPacket(int source_id, int destination_id);             // send a packet from source to destination using optimal path
     void tracePacket(int packet_id);                                // show the path of the packet after it was sent
@@ -28,6 +35,7 @@ public:
 private:
     // The network is bidirectional weighted graph (different latencies between 2 directions are possible)
     // graph properties
+    int device_id_counter = 0;
     std::vector<int> devices;                                            // or nodes
     std::vector<std::pair<int, int>> connections;                        // or edges, each pair is a connection between two nodes
     std::unordered_map<int, std::unordered_map<int, int>> routing_table; // or adjacency matrix, each pair is a connection between two nodes, and the value is the latency
