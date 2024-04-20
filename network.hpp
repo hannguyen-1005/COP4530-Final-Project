@@ -9,7 +9,7 @@
 #include <unordered_set>
 #include "data.hpp"
 
-// TODO (optional) Create function to randomly generate a network given a number of nodes.
+// TODO (optional) Create a function to randomly generate a network given a number of nodes.
 
 class Network
 {
@@ -33,6 +33,7 @@ public:
     std::string tracePacket(int packet_id);                                // show the path of the packet after it was sent
     std::string traceAllPackets();                                         // show all packets already sent and their paths
     std::string showNetwork() const;                                      // return a string with the network topology
+    void generateNetwork(int num_nodes);
 
 private:
     // The network is bidirectional weighted graph (different latencies between 2 directions are possible)
