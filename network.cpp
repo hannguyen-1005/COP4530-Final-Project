@@ -37,6 +37,20 @@ bool Network::packetExists(int packet_id) const
     return packets.find(packet_id) != packets.end();
 }
 
+bool Network::pathExists(int source_id, int destination_id) const
+{
+    // Check if the source and destination devices exist
+    if (!deviceExists(source_id) || !deviceExists(destination_id))
+        return false;
+
+    // Check if there is a connection between the source and destination devices
+    if (connectionExists(source_id, destination_id))
+        return true;
+
+    // Check if there is a path between the source and destination devices by running the shortest path algorithm
+    std::vector<int> path = getShortestPath(source_id, destination_id);
+    return !path.empty();
+}
 //
 // Add and remove devices and connections
 //
@@ -135,12 +149,18 @@ std::string Network::showNetwork() const
         // check if the device has no connections
         if (it->second.empty())
         {
-            network_str += "  -> No connections;\n\n";
+            network_str += "  -> No connections;\n";
             continue;
         }
 
         for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2)
-            network_str += "  -> Device " + std::to_string(*it2) + ";\n\n";
+        {
+            network_str += "  -> Device " + std::to_string(*it2);
+            if (!routing_table.empty())
+                network_str += " (Latency: " + std::to_string(routing_table.at(it->first).at(*it2)) + ")";
+            network_str += ";\n";
+        }
+        network_str += "\n";
     }
 
     // Display packets information
@@ -167,7 +187,7 @@ void Network::sendPacket(int source_id, int destination_id)
 
     
     // Send the packet through the optimal path
-    std::vector<int> optimal_path = {source_id, destination_id};
+    std::vector<int> optimal_path = getShortestPath(source_id, destination_id);
      for (int i = 0; i < optimal_path.size(); i++)
          packet->addNodeToPath(optimal_path[i]);
 
@@ -177,7 +197,7 @@ void Network::sendPacket(int source_id, int destination_id)
     packet_destinations[packet->getId()] = destination_id;
 }
 
-std::vector<int> Network::getShortestPath(int source_id, int destination_id)
+std::vector<int> Network::getShortestPath(int source_id, int destination_id) const
 {
     // TODO: Implement Dijkstra's algorithm to find the shortest path between the source and destination devices
     // Given source_id is start node, destination_id is end node
@@ -186,13 +206,12 @@ std::vector<int> Network::getShortestPath(int source_id, int destination_id)
     // routing_table is an adjacency matrix with latencies between nodes, each latency is the edge's weight
     // Return a vector of integers representing the shortest path from source to destination
          
-    std::vector<int> distance(devices.size(), INT_MAX);
 
     // The distance from the source node to itself is 0
     std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, std::greater<std::pair<int, int>>> pq;
-    vector<int> dist(n, INT_MAX);
-    unordered_map<int, int> heap_index;
-    dist[source_id] = 0;
+    std::vector<int> distance(devices.size(), INT_MAX);
+    std::unordered_map<int, int> heap_index;
+    distance[source_id] = 0;
     pq.push(std::make_pair(0, source_id));
     while (!pq.empty()) {
         // Extract the minimum distance node from the priority queue
@@ -201,14 +220,14 @@ std::vector<int> Network::getShortestPath(int source_id, int destination_id)
         for (size_t i = 0; i < connections.size(); ++i) {
             if (connections[i].first == u) {
                 int v = connections[i].second;
-                if (distance[v] > distance[u] + routing_table[u][v]) {
-                    distance[v] = distance[u] + routing_table[u][v];
+                if (distance[v] > distance[u] + routing_table.at(u).at(v)) {
+                    distance[v] = distance[u] + routing_table.at(u).at(v);
                     pq.push({distance[v], v});
                 }
             } else if (connections[i].second == u) {
                 int v = connections[i].first;
-                if (distance[v] > distance[u] + routing_table[u][v]) {
-                    distance[v] = distance[u] + routing_table[u][v];
+                if (distance[v] > distance[u] + routing_table.at(u).at(v)) {
+                    distance[v] = distance[u] + routing_table.at(u).at(v);
                     pq.push(std::make_pair(distance[v], v));
                 }
             }
@@ -235,6 +254,8 @@ std::vector<int> Network::getShortestPath(int source_id, int destination_id)
                 }
             }
         }
+        if (next_node == -1)
+            return std::vector<int>();
         current_node = next_node;
     }
     

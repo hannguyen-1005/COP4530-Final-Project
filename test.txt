@@ -1,20 +1,34 @@
 add_device
 add_device
 add_device
+add_device
 add_connection
-1
-2
+0 1
+add_connection
+0 2
+add_connection
+0 3
+add_connection
+2 3
+
 
 show
 create
 
 send
-2
-1
+2 1
+send
+3 2
+send
+1 1
+send
+1 2
 
 show
 
 trace
 0
+trace
+2
 
 exit

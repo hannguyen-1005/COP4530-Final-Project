@@ -7,6 +7,9 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
+#include <queue>
+#include <algorithm>
+#include <climits>
 #include "data.hpp"
 
 // TODO (optional) Create function to randomly generate a network given a number of nodes.
@@ -20,7 +23,8 @@ public:
     bool deviceExists(int device_id) const;                         // check if a device exists in the network
     bool connectionExists(int device_id1, int device_id2) const;    // check if a connection exists in the network
     bool packetExists(int packet_id) const;                         // check if a packet exists in the network
-
+    bool pathExists(int source_id, int destination_id) const;      // check if a path exists between source and destination
+    // TODO: Implement the pathExists function to check if a path exists between source and destination
     void addDevice();
     void removeDevice(int device_id);                               // remove all connections to this device and the device itself
     void addConnection(int device_id1, int device_id2);
@@ -29,7 +33,7 @@ public:
 
 
     void sendPacket(int source_id, int destination_id);             // send a packet from source to destination using optimal path
-    std::vector<int> getShortestPath(int source_id, int destination_id); // return the shortest path between source and destination with Dijkstra's algorithm
+    std::vector<int> getShortestPath(int source_id, int destination_id) const; // return the shortest path between source and destination with Dijkstra's algorithm
     std::string tracePacket(int packet_id);                                // show the path of the packet after it was sent
     std::string traceAllPackets();                                         // show all packets already sent and their paths
     std::string showNetwork() const;                                      // return a string with the network topology

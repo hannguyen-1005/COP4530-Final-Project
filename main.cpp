@@ -12,7 +12,8 @@ int main()
     std::cout << "Step 1: Create a network" << std::endl;
     std::cout << "Step 2: Interact with the network" << std::endl;
     std::cout << "Type 'exit' to exit the program." << std::endl;
-    std::cout << "Read the instructions carefully and follow the commands." << std::endl;
+    std::cout << "Note that the input must be strictly typed, otherwise you might get stuck in infinite loop!" << std::endl;
+    std::cout << "Remember to Read the instructions carefully and follow the commands." << std::endl;
     std::cout << "Good luck!" << std::endl << std::endl << std::endl;
 
     // The user first creates a network with 5 options
@@ -186,9 +187,9 @@ int main()
                     continue;
                 }
 
-                if (!network.connectionExists(source_id, destination_id))
+                if (!network.pathExists(source_id, destination_id))
                 {
-                    std::cout << "No connection between source and destination, try again." << std::endl;
+                    std::cout << "No path between source and destination, try again." << std::endl;
                     continue;
                 }
 
