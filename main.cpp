@@ -21,7 +21,7 @@ int main()
     // The user first creates a network with 5 options
     Network network;
     std::string user_input = "";
-    while (user_input != "exit" || user_input != "create")
+    while (user_input != "exit" && user_input != "create")
     {
         std::cout << "Step 1: Create a network" << std::endl;
         std::cout << "Enter a command: ";
