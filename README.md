@@ -46,8 +46,8 @@ make
 | Command | Arguments                 | Description                                                                              |
 | ------- | ------------------------- | ---------------------------------------------------------------------------------------- |
 | send    | source_id, destination_id | Send a data packet from the source device to the destination device                      |
-| show    |                           | Display the network configuration, including devices, connections, and network latency   |
 | trace   | packet_id                 | Trace the route taken by a data packet with the specified ID, or -2 to trace all packets |
+| show    |                           | Display the network configuration, including devices, connections, and network latency   |
 | exit    |                           | Exit the program                                                                         |
 
 Check for example usage in the `test.txt` file. Enter each line in the file as a command in the command interface.
