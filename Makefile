@@ -1,5 +1,5 @@
 # Variable for the compiler to use
-CXX = g++
+CXX = g++ -std=c++17 -Wall
 
 # Variable for the target executable
 TARGET = main
