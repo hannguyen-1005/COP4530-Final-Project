@@ -12,8 +12,11 @@ int main()
     std::cout << "Step 1: Create a network" << std::endl;
     std::cout << "Step 2: Interact with the network" << std::endl;
     std::cout << "Type 'exit' to exit the program." << std::endl;
-    std::cout << "Read the instructions carefully and follow the commands." << std::endl;
-    std::cout << "Good luck!" << std::endl << std::endl << std::endl;
+    std::cout << "Remember to Read the instructions carefully and follow the commands." << std::endl;
+    std::cout << "Good luck!"
+              << std::endl
+              << std::endl
+              << std::endl;
 
     // The user first creates a network with 5 options
     Network network;
@@ -23,6 +26,14 @@ int main()
         std::cout << "Step 1: Create a network" << std::endl;
         std::cout << "Enter a command: ";
         std::cin >> user_input;
+
+        if (std::cin.fail())
+        {
+            std::cin.clear();
+            std::cin.ignore();
+            std::cout << std::endl << "Invalid input, try again." << std::endl;
+            continue;
+        }
 
         if (user_input == "create")
         {
@@ -62,10 +73,19 @@ int main()
                 std::cout << "Enter the device id to remove, or -1 to go back: ";
                 std::cin >> device_id;
 
+                if (std::cin.fail())
+                {
+                    std::cin.clear();
+                    std::cin.ignore();
+                    std::cout << std::endl << "Invalid input, try again." << std::endl;
+                    continue;
+                }
+
                 if (device_id == -1)
                     break;
 
-                if (!network.deviceExists(device_id)) {
+                if (!network.deviceExists(device_id))
+                {
                     std::cout << "Device id does not exist, try again." << std::endl;
                     continue;
                 }
@@ -88,6 +108,24 @@ int main()
                 std::cout << "Enter the device ids to connect, or double -1 to go back: ";
                 std::cin >> device_id1 >> device_id2;
 
+                // Validate input
+                if (std::cin.fail())
+                {
+                    std::cin.clear();
+                    std::cin.ignore();
+
+                    std::cout << std::endl << "Invalid input, try again." << std::endl;
+                    continue;
+                }
+
+                if (std::cin.fail())
+                {
+                    std::cin.clear();
+                    std::cin.ignore();
+                    std::cout << std::endl << "Invalid input, try again." << std::endl;
+                    continue;
+                }
+
                 if (device_id1 == -1 && device_id2 == -1)
                     break;
 
@@ -97,12 +135,14 @@ int main()
                     continue;
                 }
 
-                if (!network.deviceExists(device_id1) || !network.deviceExists(device_id2)) {
+                if (!network.deviceExists(device_id1) || !network.deviceExists(device_id2))
+                {
                     std::cout << "Device id does not exist, try again." << std::endl;
                     continue;
                 }
 
-                if (network.connectionExists(device_id1, device_id2)) {
+                if (network.connectionExists(device_id1, device_id2))
+                {
                     std::cout << "Connection already exists, try again." << std::endl;
                     continue;
                 }
@@ -124,19 +164,36 @@ int main()
                 std::cout << "Enter the device ids to disconnect, or double -1 to go back: ";
                 std::cin >> device_id1 >> device_id2;
 
+                // Validate input
+                if (std::cin.fail())
+                {
+                    std::cin.clear();
+                    std::cin.ignore();
+                    std::cout << std::endl << "Invalid input, try again." << std::endl;
+                    continue;
+                }
+
+                if (std::cin.fail())
+                {
+                    std::cin.clear();
+                    std::cin.ignore();
+                    std::cout << std::endl << "Invalid input, try again." << std::endl;
+                    continue;
+                }
+
                 if (device_id1 == -1 && device_id2 == -1)
                     break;
 
                 if (!network.deviceExists(device_id1) || !network.deviceExists(device_id2))
-                    {
+                {
                     std::cout << "Device id does not exist, try again." << std::endl;
                     continue;
-                    }
+                }
                 if (!network.connectionExists(device_id1, device_id2))
-                    {
-                        std::cout << "Connection does not exist, try again." << std::endl;
-                        continue;
-                    }
+                {
+                    std::cout << "Connection does not exist, try again." << std::endl;
+                    continue;
+                }
 
                 network.removeConnection(device_id1, device_id2);
                 std::cout << "Removed a connection between two devices." << std::endl;
@@ -145,7 +202,8 @@ int main()
             continue;
         }
 
-        if (user_input == "show") {
+        if (user_input == "show")
+        {
             // Show the network topology
             std::cout << network.showNetwork() << std::endl;
             continue;
@@ -160,6 +218,14 @@ int main()
         std::cout << "Step 2: Interact with the network" << std::endl;
         std::cout << "Enter a command: ";
         std::cin >> user_input;
+
+        if (std::cin.fail())
+        {
+            std::cin.clear();
+            std::cin.ignore();
+            std::cout << std::endl << "Invalid input, try again." << std::endl;
+            continue;
+        }
 
         if (user_input == "show")
         {
@@ -177,6 +243,22 @@ int main()
                 std::cout << "Enter the source and destination device ids to send a packet, or double -1 to go back: ";
                 std::cin >> source_id >> destination_id;
 
+                if (std::cin.fail())
+                {
+                    std::cin.clear();
+                    std::cin.ignore();
+                    std::cout << std::endl << "Invalid input, try again." << std::endl;
+                    continue;
+                }
+
+                if (std::cin.fail())
+                {
+                    std::cin.clear();
+                    std::cin.ignore();
+                    std::cout << std::endl << "Invalid input, try again." << std::endl;
+                    continue;
+                }
+
                 if (source_id == -1 && destination_id == -1)
                     break;
 
@@ -186,9 +268,9 @@ int main()
                     continue;
                 }
 
-                if (!network.connectionExists(source_id, destination_id))
+                if (!network.pathExists(source_id, destination_id))
                 {
-                    std::cout << "No connection between source and destination, try again." << std::endl;
+                    std::cout << "No path between source and destination, try again." << std::endl;
                     continue;
                 }
 
@@ -213,6 +295,14 @@ int main()
             {
                 std::cout << "Enter the packet id to trace, or -1 to go back, or -2 to trace all packets: ";
                 std::cin >> trace_id;
+
+                if (std::cin.fail())
+                {
+                    std::cin.clear();
+                    std::cin.ignore();
+                    std::cout << std::endl << "Invalid input, try again." << std::endl;
+                    continue;
+                }
 
                 if (trace_id == -1)
                     break;

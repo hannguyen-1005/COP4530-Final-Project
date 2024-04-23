@@ -10,7 +10,3 @@ SOURCES = $(wildcard *.cpp)
 # Rule for building the final target
 $(TARGET): $(SOURCES)
 	$(CXX) -o $(TARGET) $(SOURCES)
-
-# Rule for cleaning up the directory
-clean:
-	rm -f $(TARGET)

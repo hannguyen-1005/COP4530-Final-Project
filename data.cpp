@@ -6,7 +6,6 @@
 // Constructor
 DataPacket::DataPacket(int id) : id(id) {}
 
-
 int DataPacket::getId() const
 {
     return id;
@@ -17,7 +16,8 @@ void DataPacket::addNodeToPath(int node_id)
     routing_path.push(node_id);
 }
 
-void DataPacket::removeNodeFromPath() {
+void DataPacket::removeNodeFromPath()
+{
     routing_path.pop();
 }
 
