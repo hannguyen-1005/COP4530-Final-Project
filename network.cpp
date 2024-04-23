@@ -294,10 +294,27 @@ std::string Network::traceAllPackets()
 {
     // Return a string with the information of all packets
     // Use the tracePacket function to get the path of each packet
-    std::string packets_str = "All Packets Routes:\n";
-    for (auto it = packets.begin(); it != packets.end(); ++it)
-    {
-        packets_str += "Packet " + std::to_string(it->first) + ": " + tracePacket(it->first) + "\n";
+    std::string all_packets_info = "All Packets Information:\n";
+
+    // Check if there are any packets in the network
+    if (packets.empty()) {
+        all_packets_info += "No packets have been sent in the network.\n";
+        return all_packets_info;
     }
-    return packets_str;
+
+    for (const auto& packet : packets)
+    {
+        all_packets_info += "Packet ID: " + std::to_string(packet.first) + "\n";
+
+        // Get the path of the packet
+        std::string path = tracePacket(packet.first);
+
+        // Check if the packet has a valid path
+        if (path.empty())
+            all_packets_info += "Path: No valid path for this packet.\n";
+        else
+            all_packets_info += "Path: " + path + "\n\n";
+    }
+
+    return all_packets_info;
 }
