@@ -11,24 +11,18 @@ add_connection
 add_connection
 2 3
 
-
-show
 create
+show
 
 send
 2 1
 send
 3 2
 send
-1 1
-send
 1 2
 
 show
-
 trace
-0
-trace
-2
+-2
 
 exit

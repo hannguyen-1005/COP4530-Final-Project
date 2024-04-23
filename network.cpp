@@ -1,4 +1,3 @@
-#include <algorithm>
 #include "network.hpp"
 
 // This file is the implementation of the Network class,
@@ -185,13 +184,12 @@ void Network::sendPacket(int source_id, int destination_id)
     // Create a new packet
     DataPacket *packet = new DataPacket(packet_id_counter++);
 
-    
     // Send the packet through the optimal path
     std::vector<int> optimal_path = getShortestPath(source_id, destination_id);
-     for (int i = 0; i < optimal_path.size(); i++)
-         packet->addNodeToPath(optimal_path[i]);
+    for (int i = 0; i < optimal_path.size(); i++)
+        packet->addNodeToPath(optimal_path[i]);
 
-    //Save the source and destination devices for the packet
+    // Save the source and destination devices for the packet
     packets[packet->getId()] = packet;
     packet_sources[packet->getId()] = source_id;
     packet_destinations[packet->getId()] = destination_id;
@@ -199,13 +197,13 @@ void Network::sendPacket(int source_id, int destination_id)
 
 std::vector<int> Network::getShortestPath(int source_id, int destination_id) const
 {
-    // TODO: Implement Dijkstra's algorithm to find the shortest path between the source and destination devices
+    // Implemented Dijkstra's algorithm to find the shortest path between the source and destination devices
     // Given source_id is start node, destination_id is end node
     // devices is a vector of all nodes in the network
     // connections is a vector of all edges in the network
     // routing_table is an adjacency matrix with latencies between nodes, each latency is the edge's weight
     // Return a vector of integers representing the shortest path from source to destination
-         
+    // Note that the latency differs between 2 ways of a connection, so the routing_table is not symmetric
 
     // The distance from the source node to itself is 0
     std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, std::greater<std::pair<int, int>>> pq;
@@ -213,20 +211,27 @@ std::vector<int> Network::getShortestPath(int source_id, int destination_id) con
     std::unordered_map<int, int> heap_index;
     distance[source_id] = 0;
     pq.push(std::make_pair(0, source_id));
-    while (!pq.empty()) {
+    while (!pq.empty())
+    {
         // Extract the minimum distance node from the priority queue
         int u = pq.top().second;
         pq.pop();
-        for (size_t i = 0; i < connections.size(); ++i) {
-            if (connections[i].first == u) {
+        for (size_t i = 0; i < connections.size(); ++i)
+        {
+            if (connections[i].first == u)
+            {
                 int v = connections[i].second;
-                if (distance[v] > distance[u] + routing_table.at(u).at(v)) {
+                if (distance[v] > distance[u] + routing_table.at(u).at(v))
+                {
                     distance[v] = distance[u] + routing_table.at(u).at(v);
                     pq.push({distance[v], v});
                 }
-            } else if (connections[i].second == u) {
+            }
+            else if (connections[i].second == u)
+            {
                 int v = connections[i].first;
-                if (distance[v] > distance[u] + routing_table.at(u).at(v)) {
+                if (distance[v] > distance[u] + routing_table.at(u).at(v))
+                {
                     distance[v] = distance[u] + routing_table.at(u).at(v);
                     pq.push(std::make_pair(distance[v], v));
                 }
@@ -235,20 +240,27 @@ std::vector<int> Network::getShortestPath(int source_id, int destination_id) con
     }
     std::vector<int> shortest_path;
     int current_node = destination_id;
-    while (current_node != source_id) {
+    while (current_node != source_id)
+    {
         shortest_path.push_back(current_node);
         int min_distance = INT_MAX;
         int next_node = -1;
-        for (size_t i = 0; i < connections.size(); ++i) {
-            if (connections[i].first == current_node) {
+        for (size_t i = 0; i < connections.size(); ++i)
+        {
+            if (connections[i].first == current_node)
+            {
                 int node2 = connections[i].second;
-                if (distance[node2] < min_distance) {
+                if (distance[node2] < min_distance)
+                {
                     min_distance = distance[node2];
                     next_node = node2;
                 }
-            } else if (connections[i].second == current_node) {
+            }
+            else if (connections[i].second == current_node)
+            {
                 int node1 = connections[i].first;
-                if (distance[node1] < min_distance) {
+                if (distance[node1] < min_distance)
+                {
                     min_distance = distance[node1];
                     next_node = node1;
                 }
@@ -258,14 +270,14 @@ std::vector<int> Network::getShortestPath(int source_id, int destination_id) con
             return std::vector<int>();
         current_node = next_node;
     }
-    
-        // Add the source node to the shortest path
-        shortest_path.push_back(source_id);
-    
-        // Reverse the shortest path vector
-        std::reverse(shortest_path.begin(), shortest_path.end());
-    
-        return shortest_path;
+
+    // Add the source node to the shortest path
+    shortest_path.push_back(source_id);
+
+    // Reverse the shortest path vector
+    std::reverse(shortest_path.begin(), shortest_path.end());
+
+    return shortest_path;
 }
 
 std::string Network::tracePacket(int packet_id)
@@ -280,8 +292,12 @@ std::string Network::tracePacket(int packet_id)
 
 std::string Network::traceAllPackets()
 {
-    // TODO: Implement a function to show all packets already sent and their paths
     // Return a string with the information of all packets
     // Use the tracePacket function to get the path of each packet
-    return "";
+    std::string packets_str = "All Packets Routes:\n";
+    for (auto it = packets.begin(); it != packets.end(); ++it)
+    {
+        packets_str += "Packet " + std::to_string(it->first) + ": " + tracePacket(it->first) + "\n";
+    }
+    return packets_str;
 }

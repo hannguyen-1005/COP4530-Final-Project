@@ -4,18 +4,17 @@
 #include <stack>
 #include <string>
 
-class DataPacket {
+class DataPacket
+{
 public:
     DataPacket(int id);
-    void addNodeToPath(int node_id);
-    void removeNodeFromPath();
-    int getId() const;
-    std::string getRoutingPath() const;
+    int getId() const;                  // get the packet id
+    std::string getRoutingPath() const; // get the routing path as a string
+    void addNodeToPath(int node_id);    // add a node to the routing path
+    void removeNodeFromPath();          // remove the last node from the routing path
 
 private:
     int id;
-    // std::stack<int> routing_path;
-    //create mock data in stack
     std::stack<int> routing_path;
 };
 
